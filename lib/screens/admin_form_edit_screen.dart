@@ -1264,7 +1264,7 @@ class _AdminFormEditScreenState extends State<AdminFormEditScreen>
                         const SizedBox(height: 12),
                         
                         // Show options if the selected question has them
-                        if (selectedField != null && selectedField.optionsEn.isNotEmpty) ...[
+                        if (selectedField?.optionsEn.isNotEmpty == true) ...[
                           const Text(
                             'Select the answer that should trigger this question:',
                             style: TextStyle(fontSize: 12, color: AppColors.darkGrey),
@@ -1273,13 +1273,13 @@ class _AdminFormEditScreenState extends State<AdminFormEditScreen>
                           Wrap(
                             spacing: 8,
                             runSpacing: 4,
-                            children: selectedField.optionsEn.map((option) {
+                            children: selectedField?.optionsEn.map((option) {
                               final isSelected = _conditionValueEnController.text == option;
                               return FilterChip(
                                 label: Text(option),
                                 selected: isSelected,
                                 onSelected: (selected) {
-                                  if (selected) {
+                                  if (selected && selectedField != null) {
                                     setState(() {
                                       _conditionValueEnController.text = option;
                                       // Try to find matching translations
@@ -1306,7 +1306,7 @@ class _AdminFormEditScreenState extends State<AdminFormEditScreen>
                                     : null,
                                 selectedColor: AppColors.secondary.withOpacity(0.3),
                               );
-                            }).toList(),
+                            }).toList() ?? [],
                           ),
                           const SizedBox(height: 12),
                         ],

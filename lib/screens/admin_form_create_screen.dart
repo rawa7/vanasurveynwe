@@ -1063,7 +1063,7 @@ class _AdminFormCreateScreenState extends State<AdminFormCreateScreen>
                         const SizedBox(height: 12),
                         
                         // Show options if the selected question has them
-                        if (selectedField != null && selectedField.optionsEn.isNotEmpty) ...[
+                        if (selectedField?.optionsEn.isNotEmpty == true) ...[
                           const Text(
                             'Select the answer that should trigger this question:',
                             style: TextStyle(fontSize: 12, color: AppColors.darkGrey),

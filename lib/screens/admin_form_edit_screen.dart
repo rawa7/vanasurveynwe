@@ -1280,16 +1280,17 @@ class _AdminFormEditScreenState extends State<AdminFormEditScreen>
                                 selected: isSelected,
                                 onSelected: (selected) {
                                   if (selected && selectedField != null) {
+                                    final field = selectedField!; // Create non-null local variable
                                     setState(() {
                                       _conditionValueEnController.text = option;
                                       // Try to find matching translations
-                                      final optionIndex = selectedField.optionsEn.indexOf(option);
+                                      final optionIndex = field.optionsEn.indexOf(option);
                                       if (optionIndex != -1) {
-                                        if (selectedField.optionsFa.length > optionIndex) {
-                                          _conditionValueFaController.text = selectedField.optionsFa[optionIndex];
+                                        if (field.optionsFa.length > optionIndex) {
+                                          _conditionValueFaController.text = field.optionsFa[optionIndex];
                                         }
-                                        if (selectedField.optionsAr.length > optionIndex) {
-                                          _conditionValueArController.text = selectedField.optionsAr[optionIndex];
+                                        if (field.optionsAr.length > optionIndex) {
+                                          _conditionValueArController.text = field.optionsAr[optionIndex];
                                         }
                                       }
                                     });

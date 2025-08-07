@@ -5,6 +5,7 @@ import '../models/survey_form.dart';
 import '../models/form_detail.dart';
 import '../models/seller.dart';
 import '../models/admin.dart';
+import '../models/survey_response.dart';
 
 class ApiService {
   static const String baseUrl = 'https://dasroor.com/forms';
@@ -303,6 +304,68 @@ class ApiService {
       }
     } catch (e) {
       throw Exception('Failed to update form: $e');
+    }
+  }
+
+  // Survey Responses Methods
+  static Future<SurveyResponsesResult> getFormResponses(int formId) async {
+    try {
+      final admin = await getStoredAdmin();
+      if (admin == null) throw Exception('Admin not authenticated');
+
+      final response = await http.get(
+        Uri.parse('$baseUrl/get_responses.php?id=$formId'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${admin.token}',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> jsonData = json.decode(response.body);
+        return SurveyResponsesResult.fromJson(jsonData);
+      } else {
+        throw Exception('Failed to load form responses: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Failed to load form responses: $e');
+    }
+  }
+
+  static Future<SurveyResponsesResult> getFormResponsesWithAnalytics(int formId) async {
+    try {
+      final admin = await getStoredAdmin();
+      if (admin == null) throw Exception('Admin not authenticated');
+
+      final response = await http.get(
+        Uri.parse('$baseUrl/get_responses_with_analytics.php?id=$formId'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${admin.token}',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> jsonData = json.decode(response.body);
+        return SurveyResponsesResult.fromJson(jsonData);
+      } else {
+        throw Exception('Failed to load form responses with analytics: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Failed to load form responses with analytics: $e');
+    }
+  }
+
+  static Future<AnalyticsData> getFormAnalytics(int formId) async {
+    try {
+      final responsesResult = await getFormResponses(formId);
+      if (!responsesResult.success) {
+        throw Exception('Failed to get form responses for analytics');
+      }
+
+      return AnalyticsData.fromResponses(responsesResult.responses);
+    } catch (e) {
+      throw Exception('Failed to generate analytics: $e');
     }
   }
 }

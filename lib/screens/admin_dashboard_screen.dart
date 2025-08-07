@@ -6,6 +6,8 @@ import '../models/survey_form.dart';
 import '../services/api_service.dart';
 import 'admin_form_create_screen.dart';
 import 'admin_form_edit_screen.dart';
+import 'admin_form_responses_screen.dart';
+import 'admin_form_analytics_screen.dart';
 
 class AdminDashboardScreen extends StatefulWidget {
   final Admin admin;
@@ -357,8 +359,11 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               case 'edit':
                 _navigateToEditForm(form);
                 break;
-              case 'view':
-                _viewFormDetails(form);
+              case 'responses':
+                _navigateToResponses(form);
+                break;
+              case 'analytics':
+                _navigateToAnalytics(form);
                 break;
               case 'delete':
                 _showDeleteDialog(form);
@@ -367,22 +372,32 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
           },
           itemBuilder: (context) => [
             const PopupMenuItem(
+              value: 'responses',
+              child: Row(
+                children: [
+                  Icon(Icons.list_alt, size: 18, color: AppColors.primary),
+                  SizedBox(width: 8),
+                  Text('View Responses'),
+                ],
+              ),
+            ),
+            const PopupMenuItem(
+              value: 'analytics',
+              child: Row(
+                children: [
+                  Icon(Icons.analytics, size: 18, color: Colors.green),
+                  SizedBox(width: 8),
+                  Text('Analytics'),
+                ],
+              ),
+            ),
+            const PopupMenuItem(
               value: 'edit',
               child: Row(
                 children: [
                   Icon(Icons.edit, size: 18),
                   SizedBox(width: 8),
                   Text('Edit'),
-                ],
-              ),
-            ),
-            const PopupMenuItem(
-              value: 'view',
-              child: Row(
-                children: [
-                  Icon(Icons.visibility, size: 18),
-                  SizedBox(width: 8),
-                  Text('View Details'),
                 ],
               ),
             ),
@@ -421,11 +436,26 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     ).then((_) => _loadForms());
   }
 
-  void _viewFormDetails(SurveyForm form) {
-    // TODO: Implement form details view
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Form details view coming soon'),
+  void _navigateToResponses(SurveyForm form) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AdminFormResponsesScreen(
+          formId: form.id,
+          formTitle: form.title,
+        ),
+      ),
+    );
+  }
+
+  void _navigateToAnalytics(SurveyForm form) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AdminFormAnalyticsScreen(
+          formId: form.id,
+          formTitle: form.title,
+        ),
       ),
     );
   }
